@@ -12,7 +12,13 @@ Parámetros recomendados:
 * RAM	2 GB (4 GB ideal)
 * CPU	2
 * Disco	30 GB (VDI dinámico)
-* Red	NAT (por ahora)
+* Red	NAT (por ahora) / una vez iniciada la instalación pasar a "Adaptador Puente"
+
+<img width="609" height="346" alt="Captura de pantalla 2025-12-22 232011" src="https://github.com/user-attachments/assets/1c5c6093-72b6-47a9-8742-878cedca425f" />
+<img width="605" height="230" alt="Captura de pantalla 2025-12-22 232032" src="https://github.com/user-attachments/assets/c5766de9-ae71-499a-8529-31160c40958f" />
+<img width="605" height="265" alt="Captura de pantalla 2025-12-22 232044" src="https://github.com/user-attachments/assets/c3163e74-2b4c-4d46-93ba-3e81ca1ecd63" />
+
+
 
 ## 🚀 Primer Arranque
 
@@ -112,3 +118,5 @@ Luego entra con:
 login: firox
 password: ********
 ```
+
+<img width="798" height="192" alt="Captura de pantalla 2025-12-22 231947" src="https://github.com/user-attachments/assets/b278931c-db55-49c3-9cb9-31177e03a4c4" />
