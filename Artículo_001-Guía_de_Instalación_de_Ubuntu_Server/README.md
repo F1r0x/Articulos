@@ -120,3 +120,14 @@ password: ********
 ```
 
 <img width="798" height="192" alt="Captura de pantalla 2025-12-22 231947" src="https://github.com/user-attachments/assets/b278931c-db55-49c3-9cb9-31177e03a4c4" />
+
+
+## 🛜 Establecer conexión a internet:
+
+Forzar solicitud de IP con DHCP. Si no hay IP o no hay default route:
+
+``` bash
+sudo dhclient -v
+```
+
+Esto pide una IP al router. Si da error o no recibe IP, es un problema de comunicación entre la VM y tu red.
