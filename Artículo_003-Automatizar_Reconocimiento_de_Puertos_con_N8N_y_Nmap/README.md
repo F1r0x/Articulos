@@ -3,7 +3,6 @@
 
 <img width="972" height="366" alt="Captura de pantalla 2025-12-23 095945" src="https://github.com/user-attachments/assets/4a00896c-f002-4f98-a414-24e3c618888a" />
 
-## Introducción
 
 En este artículo voy a mostrar cómo he construido un **flujo de automatización de pentesting** utilizando **n8n** y **Nmap**, ejecutándose en un entorno completamente **gratuito**, controlado y reproducible.
 
@@ -70,7 +69,7 @@ Esto es clave porque convierte a n8n en un **cerebro de automatización**, mient
 
 ---
 
-## Descripción general del flujo
+# 🧩 Descripción general del flujo
 
 El flujo completo realiza lo siguiente:
 
