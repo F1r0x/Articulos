@@ -120,6 +120,7 @@ services:
       - N8N_BASIC_AUTH_ACTIVE=true
       - N8N_BASIC_AUTH_USER=admin
       - N8N_BASIC_AUTH_PASSWORD=tu_contraseña_segura
+      - N8N_SECURE_COOKIE=false  
 ```
 
 > Cambia `tu_contraseña_segura` por la contraseña que quieras.
@@ -137,6 +138,11 @@ docker ps
 ```
 
 * Deberías ver el contenedor `n8n` activo.
+
+
+<img width="947" height="165" alt="Captura de pantalla 2025-12-23 011036" src="https://github.com/user-attachments/assets/a004538c-d54e-445a-be90-f79a1c2af8ee" />
+
+
 * Ahora puedes abrir en tu navegador de Windows:
 
 ```
@@ -147,6 +153,6 @@ http://IP_DE_UBUNTU:5678
 
 ---
 
-Si quieres, puedo hacerte una **versión mejorada del `docker-compose.yml` para producción**, con **persistencia de datos**, que asegura que tus flujos no se pierdan al reiniciar el contenedor.
 
-¿Quieres que haga eso?
+<img width="564" height="531" alt="Captura de pantalla 2025-12-23 012028" src="https://github.com/user-attachments/assets/23d91863-82cd-47aa-8ac7-674b3b381849" />
+
