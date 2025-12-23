@@ -62,6 +62,27 @@ docker compose version
 
 * Deberías ver algo como `Docker version 24.x.x` y `Docker Compose version 2.x.x`.
 
+
+### Añadir tu usuario al grupo docker
+
+Ejecuta:
+```
+sudo usermod -aG docker $USER
+```
+
+Esto añade tu usuario actual al grupo docker, que tiene permisos sobre /var/run/docker.sock.
+
+### Cerrar sesión y volver a entrar
+
+Esto es obligatorio para que los cambios de grupo tengan efecto.
+
+Cierra la sesión de la VM y vuelve a entrar, o ejecuta:
+```
+newgrp docker
+```
+
+Esto aplica los cambios de grupo sin necesidad de reiniciar sesión.
+
 ---
 
 ## **6️⃣ Ejecutar Docker sin sudo (opcional, recomendado)**
