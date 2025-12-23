@@ -1,4 +1,4 @@
-# Está es una guía de instalación de Ubuntu Server 
+# Instalación de Ubuntu Server 
 
 👉 [Descargar Ubuntu Server 24.04.5 LTS](https://ubuntu.com/download/alternative-downloads)
 
