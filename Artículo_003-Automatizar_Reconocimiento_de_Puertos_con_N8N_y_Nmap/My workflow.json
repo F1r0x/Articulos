@@ -1,0 +1,200 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const output = $json.stdout;\n\n// Extraer IP\nconst ipMatch = output.match(/\\d{1,3}(\\.\\d{1,3}){3}/);\nconst ip_address = ipMatch ? ipMatch[0] : \"Unknown\";\n\n// Extraer puertos abiertos\nconst ports = [...output.matchAll(/(\\d{1,5})\\/tcp\\s+open/g)]\n  .map(match => match[1]);\n\nreturn [{\n  ip_address,\n  open_ports: ports,\n  ports_string: ports.join(','),\n  port_count: ports.length\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ],
+      "id": "0cf46b64-20e6-4bba-8cce-00bdf5402fe6",
+      "name": "Filtrar Puertos"
+    },
+    {
+      "parameters": {
+        "command": "nmap -sV -Pn 192.168.68.53"
+      },
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        304,
+        0
+      ],
+      "id": "c77fa7f1-fd91-4ed7-affa-3bd9d985fdec",
+      "name": "Nmap",
+      "credentials": {
+        "sshPassword": {
+          "id": "bcFB2hxSdGkeqK4E",
+          "name": "SSH Password account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $json.ports.map(p => `\n<tr>\n  <td>${p.port}</td>\n  <td>${p.service}</td>\n  <td>${p.version}</td>\n</tr>\n`).join(\"\");\n\nreturn [{\n  html: `\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Nmap Scan Report</title>\n  <style>\n    body {\n      font-family: Arial, sans-serif;\n      background: #0f172a;\n      color: #e5e7eb;\n      padding: 20px;\n    }\n    h1 {\n      color: #38bdf8;\n    }\n    .card {\n      background: #020617;\n      border-radius: 10px;\n      padding: 20px;\n      margin-bottom: 20px;\n      box-shadow: 0 10px 20px rgba(0,0,0,.4);\n    }\n    table {\n      width: 100%;\n      border-collapse: collapse;\n    }\n    th, td {\n      padding: 10px;\n      border-bottom: 1px solid #334155;\n      text-align: left;\n    }\n    th {\n      color: #7dd3fc;\n    }\n    .badge {\n      display: inline-block;\n      padding: 4px 10px;\n      border-radius: 12px;\n      background: #1e40af;\n      font-size: 12px;\n    }\n  </style>\n</head>\n<body>\n\n<h1>🛡️ Nmap Scan Report</h1>\n\n<div class=\"card\">\n  <p><b>Target:</b> ${$json.ip}</p>\n  <p><b>Date:</b> ${$json.date}</p>\n  <p>\n    <b>n8n detected:</b>\n    ${$json.n8nDetected ? `<span class=\"badge\">YES (${ $json.n8nVersion })</span>` : \"NO\"}\n  </p>\n</div>\n\n<div class=\"card\">\n  <h2>🔓 Open Ports</h2>\n  <table>\n    <tr>\n      <th>Port</th>\n      <th>Service</th>\n      <th>Version</th>\n    </tr>\n    ${rows}\n  </table>\n</div>\n\n</body>\n</html>\n`\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        0
+      ],
+      "id": "ba3ba7ef-276d-4342-87ab-198032999e44",
+      "name": "Crear Informe HTML"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = $json.stdout;\n\n// IP\nconst ip = output.match(/\\d{1,3}(\\.\\d{1,3}){3}/)?.[0] ?? \"N/A\";\n\n// Puertos\nconst ports = [...output.matchAll(/(\\d{1,5})\\/tcp\\s+open\\s+([\\w\\-\\?]+)\\s*(.*)?/g)]\n  .map(p => ({\n    port: p[1],\n    service: p[2],\n    version: p[3]?.trim() || \"Unknown\"\n  }));\n\n// n8n detectado\nconst n8nDetected = output.includes(\"n8n@\");\nconst n8nVersion = output.match(/n8n@([\\d\\.]+)/)?.[1] ?? \"Unknown\";\n\nreturn [{\n  ip,\n  ports,\n  n8nDetected,\n  n8nVersion,\n  date: new Date().toLocaleString()\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        848,
+        0
+      ],
+      "id": "78584764-baf8-4a00-adfe-2d52c97b6a49",
+      "name": "Filtar Escaneo"
+    },
+    {
+      "parameters": {
+        "command": "=nmap -sC -sV -n -v -p {{ $json.ports_string }} {{ $json.ip_address }}"
+      },
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        672,
+        0
+      ],
+      "id": "90b58ad8-9531-4b90-9e12-39bc09c7fe9d",
+      "name": "Nmap1",
+      "credentials": {
+        "sshPassword": {
+          "id": "bcFB2hxSdGkeqK4E",
+          "name": "SSH Password account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "### Escaneo de puertos\nNmap",
+        "height": 240,
+        "width": 304,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        288,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "aee61e38-71e1-4a81-9a9f-ec6a607120cd",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "### Escaneo de puertos definidos\nNmap",
+        "height": 240,
+        "width": 320,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        656,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "e9f5d362-d7f2-4006-a3bd-2c9e8dd41cfa",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        80,
+        0
+      ],
+      "id": "1797abd1-158a-4a38-8446-565bd7686325",
+      "name": "Iniciar Reconocimiento"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Filtrar Puertos": {
+      "main": [
+        [
+          {
+            "node": "Nmap1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nmap": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Puertos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear Informe HTML": {
+      "main": [
+        []
+      ]
+    },
+    "Filtar Escaneo": {
+      "main": [
+        [
+          {
+            "node": "Crear Informe HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nmap1": {
+      "main": [
+        [
+          {
+            "node": "Filtar Escaneo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Iniciar Reconocimiento": {
+      "main": [
+        [
+          {
+            "node": "Nmap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "522fae2c-2734-4238-94f0-824d9cbc908a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4960f7bea9fd01b0ba22182b2cd771e0e1d26260728e842ae963862943e141e0"
+  },
+  "id": "8FpSHA5VAE9zUlzq",
+  "tags": []
+}
