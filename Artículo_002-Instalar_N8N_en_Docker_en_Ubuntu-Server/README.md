@@ -1,4 +1,4 @@
-# 🧩 Instalar **Docker** en un Ubuntu Server y después configuraremos **n8n**. 
+## 🧩 Instalar **N8N** en **Docker** en un Ubuntu Server. 
 
 ---
 
